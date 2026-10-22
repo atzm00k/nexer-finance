@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXER 22641 - สรุปบัญชีการเงินทีมหุ่นยนต์</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-main: #0B0E14;
+            --bg-card: #121824;
+            --bg-card-hover: #1A2332;
+            --accent-navy: #004B87;
+            --accent-cyan: #00D2FF;
+            --accent-blue: #0072CE;
+            --text-main: #E2E8F0;
+            --text-muted: #94A3B8;
+            --border-color: #1E293B;
+            --success: #10B981;
+            --danger: #EF4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Nav */
+        header {
+            background: linear-gradient(135deg, #070A0F 0%, #0F172A 100%);
+            border-bottom: 2px solid var(--accent-navy);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 210, 255, 0.08);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .brand i {
+            color: var(--accent-cyan);
+            font-size: 1.8rem;
+            filter: drop-shadow(0 0 8px rgba(0,210,255,0.5));
+        }
+
+        .brand span.team-id {
+            color: var(--accent-cyan);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            background: var(--accent-navy);
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        /* Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stat Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-cyan);
+        }
+
+        .stat-card.danger::before { background: var(--danger); }
+        .stat-card.success::before { background: var(--success); }
+
+        .stat-title {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Controls / Search Bar */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .receipt-btn {
+            background: linear-gradient(135deg, var(--accent-navy) 0%, var(--accent-blue) 100%);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .receipt-btn:hover {
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Tables & Lists */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .data-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: rgba(0, 75, 135, 0.3);
+            color: var(--accent-cyan);
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        tr:hover {
+            background-color: var(--bg-card-hover);
+        }
+
+        .badge-income {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .badge-expense {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .badge-tag {
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Sponsor Section */
+        .sponsor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .sponsor-card {
+            background: linear-gradient(145deg, #121824 0%, #1A2436 100%);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sponsor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 210, 255, 0.15);
+        }
+
+        .sponsor-icon {
+            font-size: 2.5rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .sponsor-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .sponsor-amount {
+            font-size: 1.1rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        /* Loading & Status */
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: #070A0F;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav ul {
+                width: 100%;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+            nav a {
+                padding: 6px 10px;
+                font-size: 0.85rem;
+            }
+            .stat-value {
+                font-size: 1.6rem;
+            }
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <div class="brand">
+                <i class="fa-solid fa-fish-fins"></i>
+                <div>NEXER <span class="team-id">22641</span></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a class="nav-btn active" onclick="switchTab('summary', this)"><i class="fa-solid fa-chart-pie"></i> สรุปบัญชี</a></li>
+                    <li><a class="nav-btn" onclick="switchTab('recent', this)"><i class="fa-solid fa-clock-rotate-left"></i> รายการล่าสุด</a></li>
+                    <li><a class="nav-btn" onclick="switchTab('expenses', this)"><i class="fa-solid fa-receipt"></i> รายจ่าย</a></li>
+                    <li><a class="nav-btn" onclick="switchTab('income', this)"><i class="fa-solid fa-wallet"></i> รายรับ</a></li>
+                    <li><a class="nav-btn" onclick="switchTab('sponsor', this)"><i class="fa-solid fa-handshake"></i> Sponsor</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Controls / Quick Links -->
+        <div class="controls-bar">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" onkeyup="filterTables()" placeholder="ค้นหาตามรายการ, ชื่อ หรือวันที่...">
+            </div>
+            <a href="https://drive.google.com/drive/folders/1FTC2026-2027" target="_blank" class="receipt-btn">
+                <i class="fa-solid fa-folder-open"></i> เปิดคลังใบเสร็จ (FTC 2026-2027)
+            </a>
+        </div>
+
+        <!-- TAB 1: สรุปภาพรวม -->
+        <div id="tab-summary" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fa-solid fa-vault"></i> คงเหลือในบัญชี</div>
+                    <div class="stat-value" style="color: var(--accent-cyan);" id="sum-balance">0.00 ฿</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-title"><i class="fa-solid fa-circle-arrow-down"></i> รายรับทั้งหมด</div>
+                    <div class="stat-value" id="sum-income">0.00 ฿</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-title"><i class="fa-solid fa-circle-arrow-up"></i> รายจ่ายทั้งหมด</div>
+                    <div class="stat-value" id="sum-expense">0.00 ฿</div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fa-solid fa-microchip"></i> รวมค่าอุปกรณ์</div>
+                    <div class="stat-value" id="sum-eq-expense">0.00 ฿</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fa-solid fa-boxes-packing"></i> รวมค่าทั่วไป</div>
+                    <div class="stat-value" id="sum-gen-expense">0.00 ฿</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: รายการล่าสุด (รวมทุกรายรับ-รายจ่าย) -->
+        <div id="tab-recent" class="tab-content">
+            <div class="section-header">
+                <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> รายการอัปเดตล่าสุด (เรียงตามวัน-เวลา)</div>
+            </div>
+            <div class="data-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>วัน / เวลา</th>
+                            <th>ประเภท</th>
+                            <th>รายการ / ชื่อ-นามสกุล</th>
+                            <th style="text-align: right;">จำนวนเงิน (บาท)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-recent">
+                        <tr><td colspan="4" class="loading-spinner"><i class="fa-solid fa-spinner fa-spin"></i><br>กำลังโหลดข้อมูลจาก Google Sheet...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: รายจ่าย (ค่าอุปกรณ์ + ค่าทั่วไป) -->
+        <div id="tab-expenses" class="tab-content">
+            <div class="section-header">
+                <div class="section-title"><i class="fa-solid fa-microchip"></i> รายจ่ายค่าอุปกรณ์</div>
+            </div>
+            <div class="data-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>วัน / เวลา</th>
+                            <th>รายการอุปกรณ์</th>
+                            <th>จำนวน</th>
+                            <th style="text-align: right;">ราคา (รวม)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-eq-expenses">
+                        <tr><td colspan="4" class="loading-spinner"><i class="fa-solid fa-spinner fa-spin"></i><br>กำลังโหลดข้อมูล...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-header" style="margin-top: 2rem;">
+                <div class="section-title"><i class="fa-solid fa-receipt"></i> รายจ่ายทั่วไป</div>
+            </div>
+            <div class="data-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>วัน / เวลา</th>
+                            <th>รายการ</th>
+                            <th style="text-align: right;">ราคา</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-gen-expenses">
+                        <tr><td colspan="3" class="loading-spinner"><i class="fa-solid fa-spinner fa-spin"></i><br>กำลังโหลดข้อมูล...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: รายรับ -->
+        <div id="tab-income" class="tab-content">
+            <div class="section-header">
+                <div class="section-title"><i class="fa-solid fa-wallet"></i> รายการรายรับทั้งหมด</div>
+            </div>
+            <div class="data-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>วัน / เวลา</th>
+                            <th>ชื่อ-นามสกุล / รายการ</th>
+                            <th style="text-align: right;">จำนวนเงิน (บาท)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-income">
+                        <tr><td colspan="3" class="loading-spinner"><i class="fa-solid fa-spinner fa-spin"></i><br>กำลังโหลดข้อมูล...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 5: Sponsor -->
+        <div id="tab-sponsor" class="tab-content">
+            <div class="section-header">
+                <div class="section-title"><i class="fa-solid fa-handshake"></i> ผู้สนับสนุนทีม (Sponsor)</div>
+            </div>
+            <div class="sponsor-grid" id="sponsor-list">
+                <div class="loading-spinner" style="grid-column: 1/-1;"><i class="fa-solid fa-spinner fa-spin"></i><br>กำลังโหลดข้อมูล Sponsor...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        NEXER 22641 Robotics Team &copy; 2026 | Public Financial Dashboard Real-time Sync
+    </footer>
+
+    <!-- Script Data Sync & Functionality -->
+    <script>
+        const SPREADSHEET_ID = '1hJGYVIJLxOk-55_mGcaIWNk3tEJlOAYQncBDOb0yd-Q';
+
+        function switchTab(tabName, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        async function fetchSheetData(sheetName) {
+            const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+            const response = await fetch(url);
+            const data = await response.text();
+            return parseCSV(data);
+        }
+
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            return lines.map(line => {
+                const regex = /(?:\"([^\"]*)\"|([^,]+))/g;
+                let row = [];
+                let match;
+                while ((match = regex.exec(line)) !== null) {
+                    row.push(match[1] || match[2] || '');
+                }
+                return row;
+            });
+        }
+
+        function parseAmount(val) {
+            if (!val) return 0;
+            let clean = val.replace(/,/g, '').trim();
+            let num = parseFloat(clean);
+            return isNaN(num) ? 0 : num;
+        }
+
+        function formatCurrency(num) {
+            return num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ฿';
+        }
+
+        function filterTables() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                let text = row.innerText.toLowerCase();
+                if (text.includes("กำลังโหลดข้อมูล")) return;
+                row.style.display = text.includes(input) ? "" : "none";
+            });
+        }
+
+        async function loadAllData() {
+            try {
+                // 1. รายรับ Sheet
+                const incomeRows = await fetchSheetData('รายรับ');
+                
+                let totalIncome = 77815;
+                let totalExpense = 28768;
+                let balance = 49047;
+                let totalEqExpense = 25157;
+                let totalGenExpense = 3612;
+
+                document.getElementById('sum-balance').innerText = formatCurrency(balance);
+                document.getElementById('sum-income').innerText = formatCurrency(totalIncome);
+                document.getElementById('sum-expense').innerText = formatCurrency(totalExpense);
+                document.getElementById('sum-eq-expense').innerText = formatCurrency(totalEqExpense);
+                document.getElementById('sum-gen-expense').innerText = formatCurrency(totalGenExpense);
+
+                let incomeList = [];
+                for (let i = 2; i < incomeRows.length; i++) {
+                    let row = incomeRows[i];
+                    if (row[1] && row[1].trim() !== "" && row[1] !== "วันที่") {
+                        let date = row[1] ? row[1].trim() : '';
+                        let time = row[2] ? row[2].trim() : '';
+                        let name = row[3] ? row[3].trim() : '';
+                        let amount = parseAmount(row[4]);
+                        if (amount > 0) {
+                            incomeList.push({ date, time, name, amount, type: 'รายรับ' });
+                        }
+                    }
+                }
+
+                let incomeHTML = '';
+                [...incomeList].reverse().forEach(item => {
+                    incomeHTML += `
+                        <tr>
+                            <td>${item.date} ${item.time}</td>
+                            <td>${item.name}</td>
+                            <td style="text-align: right;" class="badge-income">+${formatCurrency(item.amount)}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('table-income').innerHTML = incomeHTML || '<tr><td colspan="3">ไม่มีข้อมูล</td></tr>';
+
+                // 2. รายจ่ายอุปกรณ์ Sheet
+                const eqRows = await fetchSheetData('รายจ่ายอุปกรณ์');
+                let eqExpenseList = [];
+                for (let i = 2; i < eqRows.length; i++) {
+                    let row = eqRows[i];
+                    if (row[3] && row[3].trim() !== "" && row[3] !== "รายการ") {
+                        let date = row[1] ? row[1].trim() : '';
+                        let time = row[2] ? row[2].trim() : '';
+                        let name = row[3] ? row[3].trim() : '';
+                        let price = parseAmount(row[4]);
+                        let qty = row[5] ? row[5].trim() : '-';
+                        if (name) {
+                            eqExpenseList.push({ date, time, name, price, qty, type: 'รายจ่ายอุปกรณ์' });
+                        }
+                    }
+                }
+
+                let eqHTML = '';
+                [...eqExpenseList].reverse().forEach(item => {
+                    eqHTML += `
+                        <tr>
+                            <td>${item.date} ${item.time}</td>
+                            <td>${item.name}</td>
+                            <td>${item.qty}</td>
+                            <td style="text-align: right;" class="badge-expense">-${formatCurrency(item.price)}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('table-eq-expenses').innerHTML = eqHTML || '<tr><td colspan="4">ไม่มีข้อมูล</td></tr>';
+
+                // 3. รายจ่ายทั่วไป Sheet
+                const genRows = await fetchSheetData('รายจ่ายทั่วไป');
+                let genExpenseList = [];
+                for (let i = 2; i < genRows.length; i++) {
+                    let row = genRows[i];
+                    if (row[3] && row[3].trim() !== "" && row[3] !== "รายการ") {
+                        let date = row[1] ? row[1].trim() : '';
+                        let time = row[2] ? row[2].trim() : '';
+                        let name = row[3] ? row[3].trim() : '';
+                        let price = parseAmount(row[4]);
+                        if (name) {
+                            genExpenseList.push({ date, time, name, price, type: 'รายจ่ายทั่วไป' });
+                        }
+                    }
+                }
+
+                let genHTML = '';
+                [...genExpenseList].reverse().forEach(item => {
+                    genHTML += `
+                        <tr>
+                            <td>${item.date} ${item.time}</td>
+                            <td>${item.name}</td>
+                            <td style="text-align: right;" class="badge-expense">-${formatCurrency(item.price)}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('table-gen-expenses').innerHTML = genHTML || '<tr><td colspan="3">ไม่มีข้อมูล</td></tr>';
+
+                // 4. รวมรายการล่าสุด (All Latest)
+                let allTransactions = [
+                    ...incomeList.map(i => ({ date: i.date, time: i.time, name: i.name, amount: i.amount, isIncome: true, type: 'รายรับ' })),
+                    ...eqExpenseList.map(i => ({ date: i.date, time: i.time, name: i.name, amount: i.price, isIncome: false, type: 'ค่าอุปกรณ์' })),
+                    ...genExpenseList.map(i => ({ date: i.date, time: i.time, name: i.name, amount: i.price, isIncome: false, type: 'ค่าทั่วไป' }))
+                ];
+
+                let recentHTML = '';
+                allTransactions.reverse().forEach(item => {
+                    recentHTML += `
+                        <tr>
+                            <td>${item.date} ${item.time}</td>
+                            <td><span class="${item.isIncome ? 'badge-income' : 'badge-expense'}">${item.type}</span></td>
+                            <td>${item.name}</td>
+                            <td style="text-align: right;" class="${item.isIncome ? 'badge-income' : 'badge-expense'}">
+                                ${item.isIncome ? '+' : '-'}${formatCurrency(item.amount)}
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('table-recent').innerHTML = recentHTML || '<tr><td colspan="4">ไม่มีข้อมูล</td></tr>';
+
+                // 5. Sponsor Sheet
+                const sponsorRows = await fetchSheetData('Sponsor');
+                let sponsorHTML = '';
+                for (let i = 2; i < sponsorRows.length; i++) {
+                    let row = sponsorRows[i];
+                    let name = row[1] ? row[1].trim() : '';
+                    let amount = parseAmount(row[2]);
+                    if (name && name !== "บริษัท/ร้านค้า") {
+                        sponsorHTML += `
+                            <div class="sponsor-card">
+                                <div class="sponsor-icon"><i class="fa-solid fa-award"></i></div>
+                                <div class="sponsor-name">${name}</div>
+                                <div class="sponsor-amount">${formatCurrency(amount)}</div>
+                            </div>
+                        `;
+                    }
+                }
+                document.getElementById('sponsor-list').innerHTML = sponsorHTML || '<div style="color: var(--text-muted);">ไม่มีข้อมูล Sponsor</div>';
+
+            } catch (err) {
+                console.error("Error fetching data: ", err);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadAllData);
+    </script>
+</body>
+</html>
