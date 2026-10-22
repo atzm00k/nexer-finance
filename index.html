@@ -65,8 +65,9 @@
         }
 
         .brand img {
-            height: 48px;
+            height: 42px;
             width: auto;
+            object-fit: contain;
             filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.4));
         }
 
@@ -417,7 +418,8 @@
     <header>
         <div class="nav-container">
             <div class="brand">
-                <img src="https://lh3.googleusercontent.com/d/1XhpKZCRjabmOA92NX1czrbKAuwnG5jwm" alt="NEXER Logo" onerror="this.src='https://raw.githubusercontent.com/github/explore/main/topics/robot/robot.png';">
+                <!-- โลโก้ฉลาม NEXER 22641 -->
+                <img src="LOGO ขาว.jpg" alt="NEXER Logo" onerror="this.src='https://raw.githubusercontent.com/github/explore/main/topics/robot/robot.png';">
                 <div class="brand-text">NEXER <span>22641</span></div>
             </div>
             <nav>
@@ -623,22 +625,11 @@
 
         async function loadAllData() {
             try {
-                // 1. รายรับ Sheet
+                // 1. ดึงข้อมูล รายรับ
                 const incomeRows = await fetchSheetData('รายรับ');
-                
-                let totalIncome = 77815;
-                let totalExpense = 28768;
-                let balance = 49047;
-                let totalEqExpense = 25157;
-                let totalGenExpense = 3612;
-
-                document.getElementById('sum-balance').innerText = formatCurrency(balance);
-                document.getElementById('sum-income').innerText = formatCurrency(totalIncome);
-                document.getElementById('sum-expense').innerText = formatCurrency(totalExpense);
-                document.getElementById('sum-eq-expense').innerText = formatCurrency(totalEqExpense);
-                document.getElementById('sum-gen-expense').innerText = formatCurrency(totalGenExpense);
-
                 let incomeList = [];
+                let calculatedTotalIncome = 0;
+
                 for (let i = 2; i < incomeRows.length; i++) {
                     let row = incomeRows[i];
                     if (row[1] && row[1].trim() !== "" && row[1] !== "วันที่") {
@@ -648,6 +639,7 @@
                         let amount = parseAmount(row[4]);
                         if (amount > 0) {
                             incomeList.push({ date, time, name, amount, type: 'รายรับ' });
+                            calculatedTotalIncome += amount;
                         }
                     }
                 }
@@ -664,9 +656,11 @@
                 });
                 document.getElementById('table-income').innerHTML = incomeHTML || '<tr><td colspan="3">ไม่มีข้อมูล</td></tr>';
 
-                // 2. รายจ่ายอุปกรณ์ Sheet
+                // 2. ดึงข้อมูล รายจ่ายอุปกรณ์
                 const eqRows = await fetchSheetData('รายจ่ายอุปกรณ์');
                 let eqExpenseList = [];
+                let calculatedTotalEqExpense = 0;
+
                 for (let i = 2; i < eqRows.length; i++) {
                     let row = eqRows[i];
                     if (row[3] && row[3].trim() !== "" && row[3] !== "รายการ") {
@@ -677,6 +671,7 @@
                         let qty = row[5] ? row[5].trim() : '-';
                         if (name) {
                             eqExpenseList.push({ date, time, name, price, qty, type: 'รายจ่ายอุปกรณ์' });
+                            calculatedTotalEqExpense += price;
                         }
                     }
                 }
@@ -694,9 +689,11 @@
                 });
                 document.getElementById('table-eq-expenses').innerHTML = eqHTML || '<tr><td colspan="4">ไม่มีข้อมูล</td></tr>';
 
-                // 3. รายจ่ายทั่วไป Sheet
+                // 3. ดึงข้อมูล รายจ่ายทั่วไป
                 const genRows = await fetchSheetData('รายจ่ายทั่วไป');
                 let genExpenseList = [];
+                let calculatedTotalGenExpense = 0;
+
                 for (let i = 2; i < genRows.length; i++) {
                     let row = genRows[i];
                     if (row[3] && row[3].trim() !== "" && row[3] !== "รายการ") {
@@ -706,6 +703,7 @@
                         let price = parseAmount(row[4]);
                         if (name) {
                             genExpenseList.push({ date, time, name, price, type: 'รายจ่ายทั่วไป' });
+                            calculatedTotalGenExpense += price;
                         }
                     }
                 }
@@ -722,7 +720,18 @@
                 });
                 document.getElementById('table-gen-expenses').innerHTML = genHTML || '<tr><td colspan="3">ไม่มีข้อมูล</td></tr>';
 
-                // 4. รวมรายการล่าสุด (All Transactions)
+                // 4. คำนวณสรุปยอดรวม Real-time แบบไดนามิก
+                let totalIncome = calculatedTotalIncome;
+                let totalExpense = calculatedTotalEqExpense + calculatedTotalGenExpense;
+                let balance = totalIncome - totalExpense;
+
+                document.getElementById('sum-balance').innerText = formatCurrency(balance);
+                document.getElementById('sum-income').innerText = formatCurrency(totalIncome);
+                document.getElementById('sum-expense').innerText = formatCurrency(totalExpense);
+                document.getElementById('sum-eq-expense').innerText = formatCurrency(calculatedTotalEqExpense);
+                document.getElementById('sum-gen-expense').innerText = formatCurrency(calculatedTotalGenExpense);
+
+                // 5. รวมรายการอัปเดตล่าสุด
                 let allTransactions = [
                     ...incomeList.map(i => ({ date: i.date, time: i.time, name: i.name, amount: i.amount, isIncome: true, type: 'รายรับ' })),
                     ...eqExpenseList.map(i => ({ date: i.date, time: i.time, name: i.name, amount: i.price, isIncome: false, type: 'ค่าอุปกรณ์' })),
@@ -744,7 +753,7 @@
                 });
                 document.getElementById('table-recent').innerHTML = recentHTML || '<tr><td colspan="4">ไม่มีข้อมูล</td></tr>';
 
-                // 5. Sponsor Sheet
+                // 6. ดึงข้อมูล Sponsor
                 const sponsorRows = await fetchSheetData('Sponsor');
                 let sponsorHTML = '';
                 for (let i = 2; i < sponsorRows.length; i++) {
