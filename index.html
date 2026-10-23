@@ -10,17 +10,17 @@
     
     <style>
         :root {
-            --bg-main: #080C14;
-            --bg-card: #0F172A;
-            --bg-card-hover: #1E293B;
-            --accent-navy: #0B3C5D;
-            --accent-cyan: #00D2FF;
-            --accent-blue: #38BDF8;
-            --text-main: #F1F5F9;
-            --text-muted: #94A3B8;
-            --border-color: #1E293B;
-            --success: #10B981;
-            --danger: #F43F5E;
+            --bg-main: #FFFFFF;
+            --bg-card: #F8FAFC;
+            --bg-card-hover: #F1F5F9;
+            --accent-navy: #0F172A;
+            --accent-cyan: #0284C7;
+            --accent-blue: #0284C7;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --success: #059669;
+            --danger: #E11D48;
         }
 
         * {
@@ -40,13 +40,13 @@
 
         /* Header Nav */
         header {
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 2px solid var(--accent-navy);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 210, 255, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .nav-container {
@@ -68,13 +68,12 @@
             height: 42px;
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.4));
         }
 
         .brand-text {
             font-size: 1.3rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--accent-navy);
             letter-spacing: 0.5px;
         }
 
@@ -105,7 +104,6 @@
         nav a:hover, nav a.active {
             color: #fff;
             background: var(--accent-navy);
-            border-bottom: 2px solid var(--accent-cyan);
         }
 
         /* Container */
@@ -134,18 +132,19 @@
         /* Main Dashboard Cards */
         .hero-balance {
             background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-            border: 1px solid rgba(0, 210, 255, 0.3);
+            border: 1px solid var(--accent-navy);
             border-radius: 16px;
             padding: 2rem;
             margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+            color: #FFFFFF;
         }
 
         .hero-title {
-            color: var(--text-muted);
+            color: #94A3B8;
             font-size: 1rem;
             margin-bottom: 6px;
             display: flex;
@@ -156,7 +155,7 @@
         .hero-value {
             font-size: 2.8rem;
             font-weight: 700;
-            color: var(--accent-cyan);
+            color: #38BDF8;
             letter-spacing: -0.5px;
         }
 
@@ -186,7 +185,7 @@
         .stat-value {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-main);
         }
 
         .stat-value.success { color: var(--success); }
@@ -214,14 +213,14 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            color: #fff;
+            color: var(--text-main);
             font-size: 0.9rem;
             outline: none;
             transition: border-color 0.2s;
         }
 
         .search-box input:focus {
-            border-color: var(--accent-cyan);
+            border-color: var(--accent-navy);
         }
 
         .search-box i {
@@ -232,8 +231,14 @@
             color: var(--text-muted);
         }
 
-        .receipt-btn {
-            background: linear-gradient(135deg, var(--accent-navy) 0%, #0284C7 100%);
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-custom {
+            background: var(--accent-navy);
             color: #fff;
             text-decoration: none;
             padding: 9px 16px;
@@ -243,20 +248,33 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            border: 1px solid var(--accent-cyan);
+            border: 1px solid var(--accent-navy);
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .receipt-btn:hover {
-            box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+        .btn-custom:hover {
+            background: #1E293B;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outline {
+            background: #FFFFFF;
+            color: var(--accent-navy);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-card-hover);
+            color: var(--accent-navy);
         }
 
         /* Tables & Lists */
         .section-title {
             font-size: 1.15rem;
             font-weight: 600;
-            color: var(--accent-cyan);
+            color: var(--accent-navy);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -279,8 +297,8 @@
         }
 
         th {
-            background-color: rgba(11, 60, 93, 0.4);
-            color: var(--accent-cyan);
+            background-color: #E2E8F0;
+            color: var(--accent-navy);
             padding: 12px 14px;
             font-weight: 600;
             font-size: 0.85rem;
@@ -291,6 +309,7 @@
             padding: 12px 14px;
             border-bottom: 1px solid var(--border-color);
             font-size: 0.9rem;
+            color: var(--text-main);
         }
 
         tr:last-child td {
@@ -312,12 +331,13 @@
         }
 
         .type-tag {
-            background: rgba(0, 210, 255, 0.1);
-            color: var(--accent-cyan);
+            background: #E0F2FE;
+            color: #0369A1;
             padding: 3px 8px;
             border-radius: 4px;
             font-size: 0.78rem;
             display: inline-block;
+            font-weight: 500;
         }
 
         /* Sponsor Section */
@@ -333,30 +353,32 @@
             border-radius: 14px;
             padding: 1.5rem;
             text-align: center;
-            transition: border-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .sponsor-card:hover {
-            border-color: var(--accent-cyan);
+            border-color: var(--accent-navy);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .sponsor-icon {
             font-size: 2.2rem;
-            color: var(--accent-cyan);
+            color: var(--accent-navy);
             margin-bottom: 0.8rem;
         }
 
         .sponsor-name {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #fff;
+            color: var(--text-main);
             margin-bottom: 0.4rem;
         }
 
         .sponsor-amount {
             font-size: 1rem;
             color: var(--success);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         /* Loading */
@@ -369,12 +391,12 @@
 
         .loading-spinner i {
             font-size: 1.8rem;
-            color: var(--accent-cyan);
+            color: var(--accent-navy);
             margin-bottom: 0.8rem;
         }
 
         footer {
-            background: #05080E;
+            background: #F1F5F9;
             border-top: 1px solid var(--border-color);
             text-align: center;
             padding: 1.2rem;
@@ -409,6 +431,13 @@
             .search-box {
                 max-width: 100%;
             }
+            .action-btns {
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn-custom {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -442,9 +471,14 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="text" id="searchInput" onkeyup="filterTables()" placeholder="ค้นหาตามรายการ, ชื่อ หรือวันที่...">
             </div>
-            <a href="https://docs.google.com/spreadsheets/d/1hJGYVIJLxOk-55_mGcaIWNk3tEJlOAYQncBDOb0yd-Q/edit?usp=sharing" target="_blank" class="receipt-btn">
-                <i class="fa-solid fa-folder-open"></i> เปิดคลังใบเสร็จ & ตารางบัญชีต้นฉบับ
-            </a>
+            <div class="action-btns">
+                <button onclick="loadAllData()" class="btn-custom btn-outline" id="refreshBtn">
+                    <i class="fa-solid fa-rotate" id="refreshIcon"></i> รีเฟรชข้อมูล
+                </button>
+                <a href="https://docs.google.com/spreadsheets/d/1hJGYVIJLxOk-55_mGcaIWNk3tEJlOAYQncBDOb0yd-Q/edit?usp=sharing" target="_blank" class="btn-custom">
+                    <i class="fa-solid fa-folder-open"></i> เปิดคลังใบเสร็จ & ตารางบัญชีต้นฉบับ
+                </a>
+            </div>
         </div>
 
         <!-- TAB 1: สรุปภาพรวม -->
@@ -455,7 +489,9 @@
                     <div class="hero-value" id="sum-balance">กำลังโหลด...</div>
                 </div>
                 <div>
-                    <span class="type-tag" style="font-size: 0.9rem; padding: 6px 12px; cursor: pointer;" onclick="loadAllData()"><i class="fa-solid fa-rotate"></i> Real-time Sync</span>
+                    <span class="type-tag" style="font-size: 0.9rem; padding: 6px 12px; cursor: pointer; background: rgba(255,255,255,0.1); color: #FFF;" onclick="loadAllData()">
+                        <i class="fa-solid fa-rotate"></i> Real-time Sync
+                    </span>
                 </div>
             </div>
 
@@ -623,6 +659,9 @@
         }
 
         async function loadAllData() {
+            const refreshIcon = document.getElementById('refreshIcon');
+            if(refreshIcon) refreshIcon.classList.add('fa-spin');
+
             try {
                 // 1. ดึงข้อมูล รายรับ
                 const incomeRows = await fetchSheetData('รายรับ');
@@ -743,10 +782,10 @@
                 }
                 document.getElementById('sponsor-list').innerHTML = sponsorHTML || '<div style="color: var(--text-muted);">ไม่มีข้อมูล Sponsor</div>';
 
-                // 5. คำนวณตามสูตรที่คุณกำหนด
-                let totalExpense = calcEq + calcGen;                                 // รายจ่ายรวมทั้งหมด = รายจ่ายอุปกรณ์ + รายจ่ายทั่วไป[cite: 1]
-                let totalIncome = calcIncomeOnly + calcSponsorTotal;                    // รายรับทั้งหมด = รายรับ + sponsor[cite: 1]
-                let balance = totalIncome - totalExpense;                             // ยอดคงเหลือในบัญชี = รายรับทั้งหมด - รายจ่ายทั้งหมด[cite: 1]
+                // 5. คำนวณตามสูตร
+                let totalExpense = calcEq + calcGen;
+                let totalIncome = calcIncomeOnly + calcSponsorTotal;
+                let balance = totalIncome - totalExpense;
 
                 // แสดงผลลัพธ์ลงบนหน้าเว็บ
                 document.getElementById('sum-balance').innerText = formatCurrency(balance);
@@ -779,6 +818,8 @@
 
             } catch (err) {
                 console.error("Error fetching data: ", err);
+            } finally {
+                if(refreshIcon) refreshIcon.classList.remove('fa-spin');
             }
         }
 
